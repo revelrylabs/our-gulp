@@ -1,6 +1,5 @@
 'use strict'
 
-const gulp = require('gulp')
 const sass = require('gulp-sass')
 const path = require('path')
 const nodemon = require('gulp-nodemon')
@@ -12,7 +11,7 @@ const rimraf = require('rimraf')
 const livereload = require('gulp-livereload')
 const createWebpackCompiler = require('./createWebpackCompiler')
 
-module.exports = function(userConfig) {
+module.exports = function(gulp, userConfig) {
 
   // ==== CONFIGURATION ===
   const config = userConfig || {}
