@@ -15,16 +15,6 @@ module.exports = function(options) {
   const DEVTOOL = 'source-map'
 
   //
-  // RESOLVE CONFIGURAITON
-  //
-  const resolveConfig = {
-    modulesDirectories: [],
-  }
-  if(process.env.NODE_PATH) {
-    resolveConfig.modulesDirectories.push(process.env.NODE_PATH)
-  }
-
-  //
   // LOADERS AND PLUGINS
   //
 
@@ -69,7 +59,6 @@ module.exports = function(options) {
       ],
     },
     plugins: clientPlugins,
-    resolve: resolveConfig,
   }
 
   //
@@ -101,7 +90,6 @@ module.exports = function(options) {
     plugins: [
       sourceMapSupportBannerPlugin,
     ],
-    resolve: resolveConfig,
   }
 
   //

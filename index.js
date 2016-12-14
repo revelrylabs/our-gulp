@@ -16,12 +16,6 @@ module.exports = function(gulp, userConfig) {
   // ==== CONFIGURATION ===
   const config = userConfig || {}
 
-  // DIRTY HACK: OVERRIDE NODE_PATH
-  if(config.nodePath) {
-    process.env.NODE_PATH = config.nodePath;
-    require('module').Module._initPaths()
-  }
-
   // PATHS CONFIGURATION
   // Base directory (Set as empty string unless everything is in a subdirectory.)
   const BASE_PATH = config.basePath || ''
@@ -48,6 +42,9 @@ module.exports = function(gulp, userConfig) {
   const NODEMON_GLOB = config.nodemonGlob || `${DIST_DEST}**/*`
   const NODEMON_SCRIPT = config.nodemonScript || `${DIST_DEST}/${SERVER_FILE}`
 
+  // Amount of time to wait between nodemon restarts and livereload triggers
+  const LIVERELOAD_TIMEOUT = config.livereloadTimeout || 2000
+
   // CDN CONFIGURATION (Set as empty string to serve normally.)
   const ASSET_URL_PREFIX = config.assetUrlPrefix || ''
 
@@ -71,7 +68,7 @@ module.exports = function(gulp, userConfig) {
   }
   const WEBPACK_HANDLER = function(err, stats) {
     if(err) {
-      console.error(err)
+      console.error(err.error)
       console.error('ERROR: Webpack build failed.')
     } else {
       console.log('SUCCESS: Webpack build completed.')
@@ -156,14 +153,17 @@ module.exports = function(gulp, userConfig) {
   gulp.task('clean', ['clean:tmp', 'clean:dist'])
 
   // SERVER RUNNER TASKS
+  let reloadTimeout = null
+  function setReloadTimeout() {
+    clearTimeout(reloadTimeout)
+    reloadTimeout = setTimeout(livereload.reload, LIVERELOAD_TIMEOUT)
+  }
   gulp.task('serve:watch', function() {
     livereload.listen()
     nodemon({
       script: NODEMON_SCRIPT,
       watch: NODEMON_GLOB,
-    }).on('restart', function() {
-      gulp.src(NODEMON_SCRIPT).pipe(livereload())
-    })
+    }).on('restart', setReloadTimeout)
   })
 
   // BUILD AND WATCH CHAINS
