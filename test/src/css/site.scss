@@ -1,4 +1,2 @@
-$site-color: 'red';
-body {
-  color: $site-color;
-}
+@import 'foundation';
+@include foundation-everything;

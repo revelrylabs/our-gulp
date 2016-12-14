@@ -17,6 +17,12 @@ module.exports = function(userConfig) {
   // ==== CONFIGURATION ===
   const config = userConfig || {}
 
+  // DIRTY HACK: OVERRIDE NODE_PATH
+  if(config.nodePath) {
+    process.env.NODE_PATH = config.nodePath;
+    require('module').Module._initPaths()
+  }
+
   // PATHS CONFIGURATION
   // Base directory (Set as empty string unless everything is in a subdirectory.)
   const BASE_PATH = config.basePath || ''
