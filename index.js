@@ -89,15 +89,19 @@ module.exports = function(gulp, userConfig) {
   })
 
   gulp.task('webpack:start-watch', function() {
-    // reset webpack.watch state when it contains errors
-    if (webpackWatch && !webpackWatch.watchings.every(watcher => watcher.error === null)) {
-      // purge error message and input file cache to start a fresh build
-      for (let i = 0, len = webpackWatch.watchings.length; i < len; i++) {
-        webpackWatch.watchings[i].error = null;
-        webpackWatch.watchings[i].compiler.purgeInputFileSystem();
+    if (!webpackWatch) {
+      return
+    }
+
+    for (let i = 0, len = webpackWatch.watchings.length; i < len; i++) {
+      // reset webpack.watch state when it contains errors
+      if (webpackWatch.watchings[i].error !== null) {
+        // purge error message and input file cache to start a fresh build
+        webpackWatch.watchings[i].error = null
+        webpackWatch.watchings[i].compiler.purgeInputFileSystem()
+        // invaldiate and re-run build
+        webpackWatch.watchings[i].invalidate()
       }
-      // invaldiate and re-run build
-      webpackWatch.invalidate();
     }
   })
 
