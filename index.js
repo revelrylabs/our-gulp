@@ -67,13 +67,6 @@ module.exports = function(gulp, userConfig) {
   const WEBPACK_WATCH_CONFIG = {
     aggregateTimeout: 300
   }
-
-  // ==== TASKS DEFINITIONS ===
-
-  // WEBPACK TASKS
-  const webpack = createWebpackCompiler(WEBPACK_OPTIONS)
-
-  // WEBPACK HANDLER
   const WEBPACK_HANDLER = function(err, stats) {
     if(err) {
       console.error(err.error.error)
@@ -83,6 +76,10 @@ module.exports = function(gulp, userConfig) {
     }
   }
 
+  // ==== TASKS DEFINITIONS ===
+
+  // WEBPACK TASKS
+  const webpack = createWebpackCompiler(WEBPACK_OPTIONS)
   let webpackWatch
   gulp.task('webpack', function(done) {
     webpack.run(function(err, stats) {
