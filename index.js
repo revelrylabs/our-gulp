@@ -24,6 +24,7 @@ module.exports = function(gulp, userConfig) {
   // Intermediate build directory (for pre-revisioning output)
   const TMP_PATH = config.tmpPath || `${BASE_PATH}tmp_build/`
   // Location of JavaScript files
+  const JS_SRC_GLOB = config.jsSrcGlob || `${SRC_PATH}js/**/*.js`
   const JS_SRC_PATH = config.jsSrcPath || `${SRC_PATH}js`
   const SERVER_DEST = config.serverDest || TMP_PATH
   const SERVER_FILE = config.serverFile || 'server.js'
@@ -66,27 +67,46 @@ module.exports = function(gulp, userConfig) {
   const WEBPACK_WATCH_CONFIG = {
     aggregateTimeout: 300
   }
+
+  // ==== TASKS DEFINITIONS ===
+
+  // WEBPACK TASKS
+  const webpack = createWebpackCompiler(WEBPACK_OPTIONS)
+
+  // WEBPACK HANDLER
   const WEBPACK_HANDLER = function(err, stats) {
     if(err) {
-      console.error(err.error)
+      console.error(err.error.error)
       console.error('ERROR: Webpack build failed.')
     } else {
       console.log('SUCCESS: Webpack build completed.')
     }
   }
 
-  // ==== TASKS DEFINITIONS ===
-
-  // WEBPACK TASKS
-  const webpack = createWebpackCompiler(WEBPACK_OPTIONS)
+  let webpackWatch
   gulp.task('webpack', function(done) {
     webpack.run(function(err, stats) {
       WEBPACK_HANDLER(err, stats)
       done()
     })
   })
-  gulp.task('webpack:watch', function() {
-    webpack.watch(WEBPACK_WATCH_CONFIG, WEBPACK_HANDLER)
+
+  gulp.task('webpack:start-watch', function() {
+    // reset webpack.watch state when it contains errors
+    if (webpackWatch && !webpackWatch.watchings.every(watcher => watcher.error === null)) {
+      // purge error message and input file cache to start a fresh build
+      for (let i = 0, len = webpackWatch.watchings.length; i < len; i++) {
+        webpackWatch.watchings[i].error = null;
+        webpackWatch.watchings[i].compiler.purgeInputFileSystem();
+      }
+      // invaldiate and re-run build
+      webpackWatch.invalidate();
+    }
+  })
+
+  gulp.task('webpack:watch', ['webpack'], function() {
+    webpackWatch = webpack.watch(WEBPACK_WATCH_CONFIG, WEBPACK_HANDLER)
+    gulp.watch(JS_SRC_GLOB, ['webpack:start-watch'])
   })
 
   // SASS TASKS
