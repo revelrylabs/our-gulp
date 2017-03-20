@@ -40,7 +40,7 @@ module.exports = function(gulp, userConfig) {
   const DIST_GLOB = config.distGlob || `${TMP_PATH}**/*`
   const DIST_DEST = config.distDest || `${BASE_PATH}dist`
   // Location to watch for changes (final build step destination)
-  const NODEMON_GLOB = config.nodemonGlob || `${DIST_DEST}**/*`
+  const NODEMON_GLOB = config.nodemonGlob || `${DIST_DEST}/**/*`
   const NODEMON_SCRIPT = config.nodemonScript || `${DIST_DEST}/${SERVER_FILE}`
 
   // Amount of time to wait between nodemon restarts and livereload triggers
