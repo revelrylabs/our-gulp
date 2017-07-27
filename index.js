@@ -69,7 +69,7 @@ module.exports = function(gulp, userConfig) {
   }
   const WEBPACK_HANDLER = function(err, stats) {
     if(err) {
-      console.error(err.error.error)
+      console.error(err.error)
       console.error('ERROR: Webpack build failed.')
     } else {
       console.log('SUCCESS: Webpack build completed.')
