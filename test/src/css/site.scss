@@ -1,2 +1,6 @@
 @import 'foundation';
 @include foundation-everything;
+
+.autoprefixer-test {
+  display: flex;
+}

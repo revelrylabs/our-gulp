@@ -9,6 +9,7 @@ const filter = require('gulp-filter')
 const sourcemaps = require('gulp-sourcemaps')
 const rimraf = require('rimraf')
 const livereload = require('gulp-livereload')
+const gulpAutoprefixer = require('gulp-autoprefixer')
 const createWebpackCompiler = require('./createWebpackCompiler')
 
 module.exports = function(gulp, userConfig) {
@@ -57,6 +58,8 @@ module.exports = function(gulp, userConfig) {
   if(process.env.NODE_ENV === 'production') {
     SASS_OPTIONS.outputStyle = 'compressed'
   }
+  const AUTOPREFIXER_OPTIONS = config.autoprefixer || {}
+  const autoprefixer = gulpAutoprefixer(AUTOPREFIXER_OPTIONS)
 
   // WEBPACK CONFIGURATION
   const WEBPACK_OPTIONS = {
@@ -115,6 +118,7 @@ module.exports = function(gulp, userConfig) {
     return gulp.src(SASS_GLOB)
       .pipe(sourcemaps.init())
       .pipe(sass(SASS_OPTIONS).on('error', sass.logError))
+      .pipe(autoprefixer)
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(SASS_DEST))
   })
