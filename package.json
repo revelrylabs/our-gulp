@@ -1,5 +1,5 @@
 {
-  "name": "our-gulp",
+  "name": "@revelry/our-gulp",
   "version": "2.1.0",
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^7.2.4",
-    "babel-core": "^6.20.0",
+    "babel-core": "^6.26.3",
     "babel-loader": "^6.2.9",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-filter": "^4.0.0",
