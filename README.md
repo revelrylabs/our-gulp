@@ -1,3 +1,9 @@
+# Notice
+
+No longer maintained. This package will not be updated and may not work for you. It will not receive security patches.
+
+We at Revelry no longer use it. We use a fairly off-the-shelf webpack configuration instead.
+
 # our-build-pipeline
 
 Tool for creating a Gulpfile that produces both server and client bundles.
